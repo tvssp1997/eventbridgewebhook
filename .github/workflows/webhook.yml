@@ -1,12 +1,17 @@
-name: Webhook Triggered Workflow
+name: Invoke Lambda Function
 
 on:
   repository_dispatch:
     types: [webhook-event]
 
 jobs:
-  print-message:
+  invoke-lambda:
     runs-on: ubuntu-latest
     steps:
-      - name: Print Message
-        run: echo "Workflow triggered by webhook event"
+      - name: Invoke Lambda Function
+        run: |
+          aws lambda invoke --function-name webhooktest --payload '{"Hello"}' /dev/null
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
