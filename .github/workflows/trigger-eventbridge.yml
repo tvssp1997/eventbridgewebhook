@@ -2,7 +2,7 @@ name: Trigger EventBridge Rule from Webhook
 on:
   push:
     branches:
-      - main
+      - eventbridge
 
 jobs:
   trigger-eventbridge:
