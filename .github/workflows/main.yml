@@ -18,6 +18,7 @@ jobs:
 
       - name: Invoke EventBridge Rule
         run: |
+          aws events create-event-bus --name webhook-event-bridge
           aws events put-events --entries '[{"Source":"custom.github","DetailType":"webhook.event","Detail":"{\"message\": \"Webhook event received from GitHub\"}"}]' --event-bus-name webhook-event-bridge
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
