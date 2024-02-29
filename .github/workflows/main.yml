@@ -3,10 +3,6 @@ on:
   push:
     branches:
       - main
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_DEFAULT_REGION: "us-east-1"
 
 jobs:
   trigger-eventbridge:
@@ -22,6 +18,10 @@ jobs:
 
       - name: Invoke EventBridge Rule
         run: |
-          aws events create-event-bus --name webhook-event-bridge
-          aws events put-events --entries '[{"Source":"custom.github","DetailType":"webhook.event","Detail":"{\"message\": \"Webhook event received from GitHub\"}"}]' --event-bus-name webhook-event-bridge
+          aws events create-event-bus --name webhook-event-bridge --event-source-name github-webhook --policy "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"AllowAll\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"events:PutEvents\"}]}"
 
+          aws events put-events --entries '[{"Source":"custom.github","DetailType":"webhook.event","Detail":"{\"message\": \"Webhook event received from GitHub\"}"}]' --event-bus-name webhook-event-bridge
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
