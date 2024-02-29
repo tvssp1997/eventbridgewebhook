@@ -1,8 +1,8 @@
 name: Trigger EventBridge Rule on Code Scanning or CodeQL Action
 
 on:
-  code_scanning_alert:
-  code_scanning_analysis:
+  # code_scanning_alert:
+  # code_scanning_analysis:
   repository_dispatch:
     types: [codeql-action]
 
