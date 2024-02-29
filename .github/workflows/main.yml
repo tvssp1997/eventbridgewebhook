@@ -1,8 +1,6 @@
 name: Trigger EventBridge Rule from Webhook
 on:
-  push:
-    branches:
-      - main
+ workflow_dispatch:
 
 jobs:
   trigger-eventbridge:
